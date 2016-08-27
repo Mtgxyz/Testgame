@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 2.6)
 project(testgame)
-
-add_executable(testgame main.cpp)
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I..")
+set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -L/usr/local/bin")
+add_executable(testgame main.cpp renderer/main.cpp)
+INCLUDE(FindPkgConfig)
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
+find_library(SDL SDL2)
+find_library(GLEW GLEW)
+find_library(GL GL)
+TARGET_LINK_LIBRARIES(testgame ${SDL} ${GLEW} ${GL})
 install(TARGETS testgame RUNTIME DESTINATION bin)

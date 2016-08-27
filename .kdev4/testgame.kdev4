@@ -1,0 +1,46 @@
+[CMake]
+Build Directory Count=1
+Current Build Directory Index=0
+ProjectRootRelative=./
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=file:///usr/home/morten/projects/testgame/build
+Build Type=Debug
+CMake Binary=file:///usr/local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
+
+[CustomDefinesAndIncludes][ProjectPath0]
+Defines=\x00\x00\x00\x00
+Includes=\x00\x00\x00\x01\x00\x00\x00H\x00/\x00u\x00s\x00r\x00/\x00h\x00o\x00m\x00e\x00/\x00m\x00o\x00r\x00t\x00e\x00n\x00/\x00p\x00r\x00o\x00j\x00e\x00c\x00t\x00s\x00/\x00t\x00e\x00s\x00t\x00g\x00a\x00m\x00e\x00/\x00.
+Path=.
+
+[Defines And Includes][Compiler]
+Name=GCC
+Path=gcc
+Type=GCC
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=testgame
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x02\x00\x00\x00\x10\x00t\x00e\x00s\x00t\x00g\x00a\x00m\x00e\x00\x00\x00\x10\x00t\x00e\x00s\x00t\x00g\x00a\x00m\x00e)
+Dependency Action=Build
+EnvironmentGroup=
+Executable=file:///usr/home/morten/projects/testgame/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=testgame,testgame
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[Project]
+VersionControlSupport=kdevgit
