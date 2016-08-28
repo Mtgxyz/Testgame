@@ -3,58 +3,32 @@
 #include <main.h>
 #include <SDL.h>
 #include <GL/glew.h>
+#include <renderer/shader.h>
 using namespace std;
 bool TestGame::init()
 {
-  GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
+  GLint link_ok = GL_FALSE;
   //Compile Vertex shader
-  GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-  const char *vs_source =
-    //"#version 100\n"  // OpenGL ES 2.0
-    "#version 120\n"  // OpenGL 2.1
-    "attribute vec2 coord2d;                  "
-    "void main(void) {                        "
-    "  gl_Position = vec4(coord2d, 0.0, 1.0); "
-    "}";
-  glShaderSource(vs, 1, &vs_source, NULL);
-  glCompileShader(vs);
-  glGetShaderiv(vs, GL_COMPILE_STATUS, &compile_ok);
-  if (!compile_ok) {
-    cerr << "Error in vertex shader" << endl;
-    return false;
+  vs = new VertexShader("shaders/triangle.v.glsl");
+  if(!vs->compile()) {
+    throw nullptr;
   }
   //Compile Fragment shader
-  GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-  const char *fs_source =
-    //"#version 100\n"  // OpenGL ES 2.0
-    "#version 120\n"  // OpenGL 2.1
-    "void main(void) {        "
-    "  gl_FragColor[0] = 0.0; "
-    "  gl_FragColor[1] = 0.0; "
-    "  gl_FragColor[2] = 1.0; "
-    "}";
-  glShaderSource(fs, 1, &fs_source, NULL);
-  glCompileShader(fs);
-  glGetShaderiv(fs, GL_COMPILE_STATUS, &compile_ok);
-  if (!compile_ok) {
-    cerr << "Error in fragment shader" << endl;
-    return false;
+  fs = new FragmentShader("shaders/triangle.f.glsl");
+  if(!fs->compile()) {
+    throw nullptr;
   }
   //Linking
-  program = glCreateProgram();
-  glAttachShader(program, vs);
-  glAttachShader(program, fs);
-  glLinkProgram(program);
-  glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
-  if (!link_ok) {
-    cerr << "Error in glLinkProgram" << endl;
-    return false;
-  }
+  vector<Shader *> shaders;
+  shaders.push_back(vs);
+  shaders.push_back(fs);
+  program=link(shaders);
+  //Set attributes
   const char* attribute_name = "coord2d";
   attribute_coord2d = glGetAttribLocation(program, attribute_name);
   if (attribute_coord2d == -1) {
     cerr << "Could not bind attribute " << attribute_name << endl;
-    return false;
+    throw nullptr;
   }
   
   return true;
@@ -81,23 +55,11 @@ void TestGame::render()
   
   glUseProgram(program);
   glEnableVertexAttribArray(attribute_coord2d);
-  GLfloat triangle_vertices[] = {
-    0.0,  0.8,
-    -0.8, -0.8,
-    0.8, -0.8,
-  };
-    // Describe our vertices array to OpenGL (it can't guess its format automatically)
-    glVertexAttribPointer(
-    attribute_coord2d, // attribute
-    2,                 // number of elements per vertex, here (x,y)
-    GL_FLOAT,          // the type of each element
-    GL_FALSE,          // take our values as-is
-    0,                 // no extra data between each position
-    triangle_vertices  // pointer to the C array
-  );
 
-  // Push each element in buffer_vertices to the vertex shader
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  
+  t1.render(attribute_coord2d);
+  t2.render(attribute_coord2d);
+  t3.render(attribute_coord2d);
 
   glDisableVertexAttribArray(attribute_coord2d);
 
@@ -107,10 +69,12 @@ void TestGame::render()
 TestGame::~TestGame()
 {
   glDeleteProgram(program);
+  delete fs;
+  delete vs;
 }
 
 int main(int argc, char **argv) {
-    TestGame game;
-    game.start();
-    return 0;
+  TestGame game;
+  game.start();
+  return 0;
 }
