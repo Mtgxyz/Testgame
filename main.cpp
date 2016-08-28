@@ -57,7 +57,25 @@ bool TestGame::tick()
   while (SDL_PollEvent(&ev)) {
     if (ev.type == SDL_QUIT)
       return false;
-    }
+  }
+  //Calculate colors
+  if(state.bright)
+    state.brightness+=0.001;
+  else
+    state.brightness-=0.001;
+  if(state.bright && state.brightness >= 1.0)
+    state.bright=false;
+  if(!state.bright && state.brightness < 0.0)
+    state.bright=true;
+  //Apply colors
+  GLfloat triangle_colors[] = {
+    state.brightness, 0.0, 0.0,
+    0.0, state.brightness, 0.0,
+    0.0, 0.0, state.brightness,
+  };
+  t1.update(triangle_colors, sizeof(triangle_colors));
+  t2.update(triangle_colors, sizeof(triangle_colors));
+  t3.update(triangle_colors, sizeof(triangle_colors));
   render();
   return true;
 }
