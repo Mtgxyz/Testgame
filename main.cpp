@@ -4,6 +4,9 @@
 #include <SDL.h>
 #include <GL/glew.h>
 #include <renderer/shader.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 using namespace std;
 bool TestGame::init()
 {
@@ -24,7 +27,7 @@ bool TestGame::init()
   shaders.push_back(fs);
   program=link(shaders);
   //Set attributes
-  const char* attribute_name = "coord2d";
+  const char* attribute_name = "coord3d";
   attribute_coord2d = glGetAttribLocation(program, attribute_name);
   if (attribute_coord2d == -1) {
     cerr << "Could not bind attribute " << attribute_name << endl;
@@ -34,7 +37,7 @@ bool TestGame::init()
   attribute_v_color = glGetAttribLocation(program, attribute_name);
   if (attribute_v_color == -1) {
     cerr << "Could not bind attribute " << attribute_name << endl;
-    return false;
+    throw nullptr;
   }
   
   GLfloat triangle_colors[] = {
@@ -42,6 +45,12 @@ bool TestGame::init()
     0.0, 0.0, 1.0,
     1.0, 0.0, 0.0,
   };
+  const char* uniform_name = "m_transform";
+  uniform_m_transform = glGetUniformLocation(program, uniform_name);
+  if (uniform_m_transform == -1) {
+    cerr << "Could not bind uniform " << uniform_name << endl;
+    throw nullptr;
+  }
   t1.init(triangle_colors,sizeof(triangle_colors));
   t2.init(triangle_colors,sizeof(triangle_colors));
   t3.init(triangle_colors,sizeof(triangle_colors));
@@ -51,13 +60,8 @@ void TestGame::stop()
 {
   //To be written
 }
-bool TestGame::tick()
+void TestGame::logic()
 {
-  SDL_Event ev;
-  while (SDL_PollEvent(&ev)) {
-    if (ev.type == SDL_QUIT)
-      return false;
-  }
   //Calculate colors
   if(state.bright)
     state.brightness+=0.001;
@@ -73,9 +77,24 @@ bool TestGame::tick()
     0.0, state.brightness, 0.0,
     0.0, 0.0, state.brightness,
   };
+  float angle = SDL_GetTicks() / 1000.0 * 45;
+  glm::vec3 axis_z(0, 0, 1);
+  float move = sinf(SDL_GetTicks() / 1000.0 * (2*3.14) / 5);
+  glm::mat4 m_transform =  glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_z) * glm::translate(glm::mat4(1.0f), glm::vec3(move, 0.0, 0.0));
+  glUniformMatrix4fv(uniform_m_transform, 1, GL_FALSE, glm::value_ptr(m_transform));
   t1.update(triangle_colors, sizeof(triangle_colors));
   t2.update(triangle_colors, sizeof(triangle_colors));
   t3.update(triangle_colors, sizeof(triangle_colors));
+}
+
+bool TestGame::tick()
+{
+  SDL_Event ev;
+  while (SDL_PollEvent(&ev)) {
+    if (ev.type == SDL_QUIT)
+      return false;
+  }
+  logic();
   render();
   return true;
 }

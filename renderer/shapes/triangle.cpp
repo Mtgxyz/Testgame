@@ -17,9 +17,9 @@ Triangle::Triangle(float ax, float ay, float bx, float by, float cx, float cy)
 }
 auto Triangle::init(GLfloat * colors, int size) -> void {
   GLfloat triangle_vertices[] = {
-    A.x, A.y, colors[0], colors[1], colors[2],
-    B.x, B.y, colors[3], colors[4], colors[5],
-    C.x, C.y, colors[6], colors[7], colors[8]
+    A.x, A.y, 0.0, colors[0], colors[1], colors[2],
+    B.x, B.y, 0.0, colors[3], colors[4], colors[5],
+    C.x, C.y, 0.0, colors[6], colors[7], colors[8]
   };
   glGenBuffers(1, &vbo_triangle);
   glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle); //Create VBO
@@ -33,8 +33,8 @@ Triangle::~Triangle()
 bool Triangle::render(GLint attrib, GLint color_attrib)
 {
   glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
-  glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), 0);
-  glVertexAttribPointer(color_attrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*) (2 * sizeof(GLfloat)));
+  glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 0);
+  glVertexAttribPointer(color_attrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (GLvoid*) (3 * sizeof(GLfloat)));
   glDrawArrays(GL_TRIANGLES, 0, 3);
   return true;
 }
@@ -51,9 +51,9 @@ auto Triangle::update(GLfloat* colors, int size) -> void
 {
   glDeleteBuffers(1, &vbo_triangle);
   GLfloat triangle_vertices[] = {
-    A.x, A.y, colors[0], colors[1], colors[2],
-    B.x, B.y, colors[3], colors[4], colors[5],
-    C.x, C.y, colors[6], colors[7], colors[8]
+    A.x, A.y, 0.0, colors[0], colors[1], colors[2],
+    B.x, B.y, 0.0, colors[3], colors[4], colors[5],
+    C.x, C.y, 0.0, colors[6], colors[7], colors[8]
   };
   glGenBuffers(1, &vbo_triangle);
   glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle); //Create VBO

@@ -9,10 +9,12 @@ private:
   GLuint program;
   GLint attribute_coord2d;
   auto render() -> void;
+    void logic();
   VertexShader *vs;
   FragmentShader *fs;
   GLint attribute_v_color;
   GameState state;
+  GLint uniform_m_transform;
 protected:
   virtual auto tick() -> bool;
   virtual auto init() -> bool;
