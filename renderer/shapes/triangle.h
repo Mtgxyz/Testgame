@@ -12,9 +12,9 @@ public:
   Triangle(float x, float y, float alen, float blen, float clen);
   Triangle(float ax, float ay, float bx, float by, float cx, float cy);
   ~Triangle();
-  auto init(GLfloat * colors, int size) -> void;
+  auto init(GLfloat * colors) -> void;
   auto render(GLint attrib, GLint colorAttrib) -> bool;
   auto setPos(float ax, float ay, float bx, float by, float cx, float cy) -> void;
-  auto update(GLfloat * colors, int size) -> void;
+  auto update(GLfloat* colors) -> void;
 };
 #endif

@@ -15,7 +15,7 @@ Triangle::Triangle(float ax, float ay, float bx, float by, float cx, float cy)
   C.y=cy-1.0;
   
 }
-auto Triangle::init(GLfloat * colors, int size) -> void {
+auto Triangle::init(GLfloat * colors) -> void {
   GLfloat triangle_vertices[] = {
     A.x, A.y, 0.0, colors[0], colors[1], colors[2],
     B.x, B.y, 0.0, colors[3], colors[4], colors[5],
@@ -47,7 +47,7 @@ auto Triangle::setPos(float ax, float ay, float bx, float by, float cx, float cy
   C.x=cx-1.0;
   C.y=cy-1.0;
 }
-auto Triangle::update(GLfloat* colors, int size) -> void
+auto Triangle::update(GLfloat* colors) -> void
 {
   glDeleteBuffers(1, &vbo_triangle);
   GLfloat triangle_vertices[] = {

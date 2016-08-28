@@ -51,9 +51,9 @@ bool TestGame::init()
     cerr << "Could not bind uniform " << uniform_name << endl;
     throw nullptr;
   }
-  t1.init(triangle_colors,sizeof(triangle_colors));
-  t2.init(triangle_colors,sizeof(triangle_colors));
-  t3.init(triangle_colors,sizeof(triangle_colors));
+  t1.init(triangle_colors);
+  t2.init(triangle_colors);
+  t3.init(triangle_colors);
   return true;
 }
 void TestGame::stop()
@@ -77,14 +77,20 @@ void TestGame::logic()
     0.0, state.brightness, 0.0,
     0.0, 0.0, state.brightness,
   };
+  GLfloat quad_colors[] = {
+    state.brightness, 0.0, 0.0,
+    0.0, state.brightness, 0.0,
+    0.0, 0.0, state.brightness,
+    state.brightness, state.brightness, state.brightness
+  };
   float angle = SDL_GetTicks() / 1000.0 * 45;
   glm::vec3 axis_z(0, 0, 1);
   float move = sinf(SDL_GetTicks() / 1000.0 * (2*3.14) / 5);
   glm::mat4 m_transform =  glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_z) * glm::translate(glm::mat4(1.0f), glm::vec3(move, 0.0, 0.0));
   glUniformMatrix4fv(uniform_m_transform, 1, GL_FALSE, glm::value_ptr(m_transform));
-  t1.update(triangle_colors, sizeof(triangle_colors));
-  t2.update(triangle_colors, sizeof(triangle_colors));
-  t3.update(triangle_colors, sizeof(triangle_colors));
+  t1.update(triangle_colors);
+  t2.update(triangle_colors);
+  t3.update(quad_colors);
 }
 
 bool TestGame::tick()
