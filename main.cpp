@@ -30,9 +30,21 @@ bool TestGame::init()
     cerr << "Could not bind attribute " << attribute_name << endl;
     throw nullptr;
   }
-  t1.init();
-  t2.init();
-  t3.init();
+  attribute_name = "v_color";
+  attribute_v_color = glGetAttribLocation(program, attribute_name);
+  if (attribute_v_color == -1) {
+    cerr << "Could not bind attribute " << attribute_name << endl;
+    return false;
+  }
+  
+  GLfloat triangle_colors[] = {
+    1.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 0.0, 0.0,
+  };
+  t1.init(triangle_colors,sizeof(triangle_colors));
+  t2.init(triangle_colors,sizeof(triangle_colors));
+  t3.init(triangle_colors,sizeof(triangle_colors));
   return true;
 }
 void TestGame::stop()
@@ -58,12 +70,13 @@ void TestGame::render()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glUseProgram(program);
   glEnableVertexAttribArray(attribute_coord2d);
-
+  glEnableVertexAttribArray(attribute_v_color);
   
-  t1.render(attribute_coord2d);
-  t2.render(attribute_coord2d);
-  t3.render(attribute_coord2d);
+  t1.render(attribute_coord2d, attribute_v_color);
+  t2.render(attribute_coord2d, attribute_v_color);
+  t3.render(attribute_coord2d, attribute_v_color);
 
+  glDisableVertexAttribArray(attribute_v_color);
   glDisableVertexAttribArray(attribute_coord2d);
 
   // Display the result

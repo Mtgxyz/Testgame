@@ -10,6 +10,7 @@ private:
   auto render() -> void;
   VertexShader *vs;
   FragmentShader *fs;
+  GLint attribute_v_color;
 protected:
   virtual auto tick() -> bool;
   virtual auto init() -> bool;
