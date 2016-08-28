@@ -13,20 +13,27 @@ Triangle::Triangle(float ax, float ay, float bx, float by, float cx, float cy)
   B.y=by-1.0;
   C.x=cx-1.0;
   C.y=cy-1.0;
-}
-
-Triangle::~Triangle()
-{
   
 }
-bool Triangle::render(GLint attrib)
-{
+auto Triangle::init() -> void {
   GLfloat triangle_vertices[] = {
     A.x, A.y,
     B.x, B.y,
     C.x, C.y
   };
-  glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
+  glGenBuffers(1, &vbo_triangle);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle); //Create VBO
+  //Fill VBO
+  glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+}
+Triangle::~Triangle()
+{
+  glDeleteBuffers(1, &vbo_triangle);
+}
+bool Triangle::render(GLint attrib)
+{
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
+  glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
   glDrawArrays(GL_TRIANGLES, 0, 3);
   return true;
 }

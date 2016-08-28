@@ -30,7 +30,9 @@ bool TestGame::init()
     cerr << "Could not bind attribute " << attribute_name << endl;
     throw nullptr;
   }
-  
+  t1.init();
+  t2.init();
+  t3.init();
   return true;
 }
 void TestGame::stop()
@@ -52,7 +54,8 @@ void TestGame::render()
   //Clear Background
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT);
-  
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glUseProgram(program);
   glEnableVertexAttribArray(attribute_coord2d);
 

@@ -6,7 +6,16 @@ MainClass::MainClass(int width, int height)
 {
   SDL_Init(SDL_INIT_VIDEO);
   window = SDL_CreateWindow("Testgame", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
-  SDL_GL_CreateContext(window);
+  if(!window) {
+    cerr << "Error: can't create window: " << SDL_GetError() << endl;
+    throw nullptr;
+  }
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 1);
+  if(!SDL_GL_CreateContext(window)) {
+    cerr << "Error: SDL_GL_CreateContext: " << SDL_GetError() << endl;
+    throw nullptr;
+  }
 }
 void MainClass::start()
 {
